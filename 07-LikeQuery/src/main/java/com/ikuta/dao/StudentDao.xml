@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ikuta.dao.StudentDao">
+	<!-- 模糊查询的第一种方式:在java代码中指定 like的内容 -->
+	<select id="selectLike1" resultType="com.ikuta.po.Student">
+		select 
+			id,name,email,age 
+		from 
+			student 
+		where 
+			name like #{name}
+	</select>
+	
+	<!-- 模糊查询的第二种方式:在mapper文件中指定like的内容 -->
+	<select id="selectLike2" resultType="com.ikuta.po.Student">
+        select 
+        	id,name,email,age 
+        from 
+        	student 
+        where 
+        	name  like #{name} "%"
+    </select>
+</mapper>

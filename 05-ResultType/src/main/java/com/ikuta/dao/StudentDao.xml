@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ikuta.dao.StudentDao">
+	<!-- resultType为java对象 -->
+	<select id="selectStudentReturnViewStudent"
+		resultType="com.ikuta.vo.ViewStudent">
+		select id,name from student where id=#{sid}
+	</select>
+
+	<!-- resultType为简单类型 -->
+	<select id="countStudent" resultType="java.lang.Integer">
+		select count(*) from student
+	</select>
+	
+	<!-- resultMap
+	1.列名是map的key， 列值是map的value
+	2.最多只能返回一行记录
+	-->
+	<select id="selectMapById" resultType="java.util.HashMap">
+        select id,name,email from student where id=#{stuid}
+    </select>
+</mapper>

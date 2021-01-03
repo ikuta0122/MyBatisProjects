@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ikuta.dao.StudentDao">
+    <!-- 一个参数 ,使用简单类型参数
+    1.parameterType属性表示dao接口中对应方法的参数数据类型
+    2.parameterType属性的值:java的数据类型全限定名称或者MyBatis定义的别名
+    3.parameterType属性并非强制性的,MyBatis通过反射机制能够发现接口方法的参数数据类型
+    -->
+    <select id="selectStudentById" parameterType="int"
+            resultType="com.ikuta.po.Student">
+		select id,name,email,age from student where id=${studentId}
+	</select>
+
+    <!-- 多个参数,使用简单类型参数
+    1.多个参数可以使用自定义参数名加以区分
+    2.语法格式:@Param("参数名")数据类型 形参
+    3.使用格式:#{参数名}
+    -->
+    <select id="selectMultiParam"
+            resultType="com.ikuta.po.Student">
+		select id,name,email,age from student where name=#{myname} or age=#{myage}
+	</select>
+
+    <!-- 多个参数,使用java对象的属性值
+    1.使用语法:#{属性名,javaType=类型名称,jdbcType=数据类型}
+        例如： #{paramName,javaType=java.lang.String,jdbcType=VARCHAR}
+    2.简化方式:#{属性名}
+    name=#{paramName}	name=#{paraName,javaType=java.lang.String,jdbcType=VARCHAR}
+    age=#{paramAge}		age=#{paramAge,javaType=java.lang.Integer,jdbcType=INTEGER}
+    -->
+    <select id="selectMultiObject"
+            resultType="com.ikuta.po.Student">
+		select id,name,email,age from student where name=#{paramName} or age=#{paramAge}
+	</select>
+    <select id="selectMultiStudent"
+            resultType="com.ikuta.po.Student">
+		select id,name,email,age from student where name=#{name} or age=#{age}
+	</select>
+
+    <!-- 多个参数,使用位置
+    1.MyBatis3.4之前,使用#{0},#{1}
+    2.MyBatis3.4之后,使用#{arg0},#{arg1}
+    -->
+    <select id="selectMultiPosition"
+            resultType="com.ikuta.po.Student">
+		select id,name,email,age from student where name = #{arg0} or age=#{arg1}
+	</select>
+
+    <!-- 多个参数,使用Map
+    1.使用语法:#{map的key}
+    -->
+    <select id="selectMultiByMap"
+            resultType="com.ikuta.po.Student">
+		select id,name, email,age from student where name = #{nameofmap} or age=#{ageofmap}
+	</select>
+
+    <!-- 使用 $连接符 -->
+    <select id="selectUse$"
+            resultType="com.ikuta.po.Student">
+		select id,name, email,age from student where name=${myname}
+	</select>
+
+    <!-- 使用 $连接符替换列名 -->
+    <select id="selectUse$Order"
+            resultType="com.ikuta.po.Student">
+		select id,name, email,age from student order by ${colName}
+	</select>
+</mapper>

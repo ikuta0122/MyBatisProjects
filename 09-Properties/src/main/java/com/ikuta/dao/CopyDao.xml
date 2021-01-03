@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ikuta.dao.CopyDao">
+    <!-- 动态SQL之SQL代码片段
+    1.先定义:使用<sql>标签定义SQL代码片段
+    2.后使用:使用<include>标签使用SQL代码片段
+    -->
+    <sql id="selectStudentSql">
+    	select id,name,age,email from student
+    </sql>
+	<!-- 动态SQL之IF
+	1.语法格式
+		<if test="[属性名 判断符 属性值]...">
+			[待拼接片段]
+		</if>
+	2.当<IF>标签中test属性为true是,<IF>标签中的内容与前文拼接
+	3.传参:name="李四",age=18
+	Preparing: select id,name,age,email from student where name = ? and age > ?
+	4.避免动态SQL语法错误:在where之后,<IF>标签之前添加一个绝对成立的条件来
+	-->
+	<select id="selectStudentIf"
+		resultType="com.ikuta.po.Student">
+		<include refid="selectStudentSql"></include>
+		where id > 0 
+		<if test="name != null and name !=''">
+			and name = #{name}
+		</if>
+		<if test="age > 0">
+			and age > #{age}
+		</if>
+	</select>
+	
+	<!-- 动态SQL之WHERE
+    1.语法格式<where> <if> <if>...</where>
+    2.当<where>标签中的<if>子标签有一个满足时,
+    	SQL语句中自动添加"where"字符,
+    	同时拼接该<if>子标签的内容
+    3.<where>标签会自动清除<IF>子标签中不需要的and/or等字符
+	-->
+    <select id="selectStudentWhere" 
+    	resultType="com.ikuta.po.Student">
+    	select id,name,age,email from student
+        <where>
+            <if test="name != null and name !='' ">
+                name = #{name}
+            </if>
+            <if test="age > 0">
+                and age > #{age}
+            </if>
+        </where>
+    </select>
+    
+    <!-- 动态SQL之foreach[用法1:简单类型]
+	1.collection表示接口中的方法参数的类型
+		1)array	表示接口中的方法参数类型为数组
+		2)list	表示接口中的方法参数类型为list集合
+	2.item	表示数组和集合成员的变量,自定义
+	3.open	表示循环开始字符
+	4.close	表示循环结束字符
+	5.separator	表示集合成员间的分隔符
+    -->
+    <select id="selectForeachOne" 
+    	resultType="com.ikuta.po.Student">
+        select * from student where id in
+        <foreach collection="list" 
+        		item="myid" 
+        		open="(" 
+        		close=")" 
+        		separator=",">
+        	#{myid}
+        </foreach>
+    </select>
+    <!-- 动态SQL之foreach[用法2:java对象]
+    1.语法格式:#{集合/数组.属性}
+    -->
+    <select id="selectForeachTwo" 
+    	resultType="com.ikuta.po.Student">
+        select * from student where id in
+        <foreach collection="list" 
+        		item="stu" 
+        		open="(" 
+        		close=")" 
+        		separator=",">
+        	#{stu.id}
+        </foreach>
+    </select>
+</mapper>
